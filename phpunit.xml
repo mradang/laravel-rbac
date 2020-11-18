@@ -26,6 +26,6 @@
 
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="RBAC_USER_MODEL" value="\Tests\User"/>
+        <env name="RBAC_USER_MODEL" value="\mradang\LaravelRbac\Test\User"/>
     </php>
 </phpunit>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace mradang\LaravelRbac\Test;
 
 use mradang\LaravelRbac\LaravelRbacServiceProvider;
 

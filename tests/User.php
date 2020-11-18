@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace mradang\LaravelRbac\Test;
 
 use Illuminate\Database\Eloquent\Model;
 use mradang\LaravelRbac\Traits\UserModelTrait;
