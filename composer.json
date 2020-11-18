@@ -1,0 +1,38 @@
+{
+    "name": "mradang/laravel-rbac",
+    "description": "laravel-rbac",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mradang",
+            "email": "mradang@163.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^5.0",
+        "laravel/framework": "~6.0|~7.0|~8.0",
+        "overtrue/laravel-pinyin": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "mradang\\LaravelRbac\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "mradang\\LaravelRbac\\LaravelRbacServiceProvider"
+            ]
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.4",
+        "phpunit/phpunit": "^9.4"
+    }
+}
