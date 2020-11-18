@@ -4,6 +4,14 @@
 $ composer require mradang/laravel-rbac -vvv
 ```
 
+### 可选项
+
+1. 发布配置文件
+
+```shell
+$ php artisan vendor:publish --provider="mradang\\LaravelRbac\\LaravelRbacServiceProvider"
+```
+
 ## 配置
 
 1. 添加 .env 环境变量，使用默认值时可省略
@@ -39,6 +47,17 @@ php artisan migrate:refresh
 - post /rbac/updateRole
 - post /rbac/deleteRole
 - post /rbac/saveRoleSort
+
+### 添加的命令
+1. 生成路由描述文件：storage/app/route_desc.json
+```bash
+php artisan rbac:MakeRouteDescFile
+```
+
+2. 刷新路由节点及描述
+```bash
+php artisan rbac:RefreshRbacNode
+```
 
 ### 添加的路由中间件
 二选一即可
