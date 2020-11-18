@@ -18,6 +18,7 @@ class LaravelRbacServiceProvider extends ServiceProvider
         }
 
         $this->registerRoutes();
+        $this->registerCommands();
         $this->registerMigrations();
         $this->registerGuard();
         $this->registerRouteMiddleware();
@@ -34,6 +35,16 @@ class LaravelRbacServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
+    }
+
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\MakeRouteDescFileCommand::class,
+                Console\RefreshRbacNodeCommand::class,
+            ]);
+        }
     }
 
     protected function registerMigrations()
