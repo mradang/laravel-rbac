@@ -14,17 +14,6 @@ class RefreshRbacNodeCommand extends Command
 
     public function handle()
     {
-        $ready = false;
-        try {
-            $ready = !empty(DB::select('DESCRIBE rbac_node'));
-        } catch (\Exception $e) {
-            $ready = false;
-        }
-
-        if ($ready) {
-            RbacNodeService::refresh();
-        } else {
-            info('数据库表不存在，未能刷新 RBAC 节点。');
-        }
+        RbacNodeService::refresh();
     }
 }

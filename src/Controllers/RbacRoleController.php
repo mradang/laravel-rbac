@@ -16,17 +16,12 @@ class RbacRoleController extends Controller
         return RbacRoleService::all();
     }
 
-    public function allWithUsers()
-    {
-        return RbacRoleService::allWithUsers();
-    }
-
-    public function findWithNodes(Request $request)
+    public function create(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer|min:1',
-        ]);
-        return RbacRoleService::findWithNodes($request->input('id'));
+            'name' => 'required|unique:rbac_role',
+        ], $this->messages);
+        return RbacRoleService::create($request->only('name'));
     }
 
     public function delete(Request $request)
@@ -35,14 +30,6 @@ class RbacRoleController extends Controller
             'id' => 'required|integer|min:1',
         ]);
         return RbacRoleService::delete($request->input('id'));
-    }
-
-    public function create(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|unique:rbac_role',
-        ], $this->messages);
-        return RbacRoleService::create($request->only('name'));
     }
 
     public function update(Request $request)
@@ -54,14 +41,12 @@ class RbacRoleController extends Controller
         return RbacRoleService::update($request->only('id', 'name'));
     }
 
-    public function syncNodes(Request $request)
+    public function findWithNodes(Request $request)
     {
-        $validatedData = $request->validate([
-            'role_id' => 'required|integer|min:1',
-            'nodes' => 'nullable|array',
-            'nodes.*' => 'required|integer',
+        $request->validate([
+            'id' => 'required|integer|min:1',
         ]);
-        RbacRoleService::syncNodes($validatedData['role_id'], $validatedData['nodes']);
+        return RbacRoleService::findWithNodes($request->input('id'));
     }
 
     public function saveSort(Request $request)
@@ -71,5 +56,15 @@ class RbacRoleController extends Controller
             '*.sort' => 'required|integer',
         ]);
         RbacRoleService::saveSort($validatedData);
+    }
+
+    public function syncNodes(Request $request)
+    {
+        $validatedData = $request->validate([
+            'role_id' => 'required|integer|min:1',
+            'nodes' => 'nullable|array',
+            'nodes.*' => 'required|integer',
+        ]);
+        RbacRoleService::syncNodes($validatedData['role_id'], $validatedData['nodes']);
     }
 }

@@ -11,11 +11,6 @@ class RbacRoleService
         return RbacRole::orderBy('sort')->get();
     }
 
-    public static function allWithUsers()
-    {
-        return RbacRole::with('users')->orderBy('sort')->get();
-    }
-
     public static function findWithNodes($id)
     {
         return RbacRole::with('nodes')->findOrFail($id);
@@ -29,8 +24,8 @@ class RbacRoleService
     public static function create($data)
     {
         $role = new RbacRole($data);
-        $role->pinyin = pinyin_abbr($data['name']);
-        $role->sort = RbacRole::max('sort') + 1;
+        $sort = RbacRole::max('sort') ?? 0;
+        $role->sort = $sort + 1;
         $role->save();
         return $role;
     }
@@ -47,19 +42,11 @@ class RbacRoleService
     {
         $role = RbacRole::findOrFail($id);
         $role->nodes()->sync($nodes);
-        $users = $role->users;
-        foreach ($users as $user) {
-            $user->rbacResetSecret();
-        }
     }
 
     public static function delete($id)
     {
         $role = RbacRole::find($id);
-        $users = $role->users;
-        foreach ($users as $user) {
-            $user->rbacResetSecret();
-        }
         $role->users()->detach();
         $role->nodes()->detach();
         $role->delete();

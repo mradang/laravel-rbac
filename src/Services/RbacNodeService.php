@@ -3,9 +3,10 @@
 namespace mradang\LaravelRbac\Services;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-
+use mradang\LaravelRbac\Models\RbacAccess;
 use mradang\LaravelRbac\Models\RbacNode;
 
 class RbacNodeService
@@ -15,52 +16,43 @@ class RbacNodeService
         return RbacNode::orderBy('name')->get();
     }
 
-    public static function allWithRole()
+    private static function apiRoutes(): Collection
     {
-        return RbacNode::with('roles')->orderBy('name')->get();
-    }
-
-    public static function ids()
-    {
-        return RbacNode::pluck('id');
+        $nodes = collect([]);
+        $routes = Route::getRoutes();
+        foreach ($routes as $route) {
+            $uri = Str::start($route->uri, '/');
+            if (Str::startsWith($uri, '/api/')) {
+                $nodes->push($route);
+            }
+        }
+        return $nodes;
     }
 
     // 无需授权的节点
-    public static function publicNodes()
+    public static function publicNodes(): Collection
     {
-        $nodes = [];
-        $routes = Route::getRoutes();
-        foreach ($routes as $route) {
-            $uri = Str::start($route->uri, '/');
-            // 只处理 api 路由
-            if (!Str::startsWith($uri, '/api/')) {
-                continue;
-            }
-            // 不需要授权
-            if (!in_array('auth', $route->middleware())) {
-                $nodes[] = Str::after($uri, '/api');
-            }
-        }
-        return $nodes;
+        return self::apiRoutes()
+            ->filter(function ($route) {
+                return !in_array('auth', $route->middleware());
+            })
+            ->map(function ($route) {
+                $uri = Str::start($route->uri, '/');
+                return Str::after($uri, '/api');
+            });
     }
 
     // 需要授权的节点
-    public static function AuthNodes()
+    public static function AuthNodes(): Collection
     {
-        $nodes = [];
-        $routes = Route::getRoutes();
-        foreach ($routes as $route) {
-            $uri = Str::start($route->uri, '/');
-            // 只处理 api 路由
-            if (!Str::startsWith($uri, '/api/')) {
-                continue;
-            }
-            // 需要授权
-            if (in_array('auth', $route->middleware())) {
-                $nodes[] = Str::after($uri, '/api');
-            }
-        }
-        return $nodes;
+        return self::apiRoutes()
+            ->filter(function ($route) {
+                return in_array('auth', $route->middleware());
+            })
+            ->map(function ($route) {
+                $uri = Str::start($route->uri, '/');
+                return Str::after($uri, '/api');
+            });
     }
 
     private static function getRouteDesc()
@@ -73,17 +65,14 @@ class RbacNodeService
         }
 
         // 设置 rbac 内置路由说明
-        Arr::set($desc, 'rbac.allNodes', '功能节点列表(sample)');
-        Arr::set($desc, 'rbac.allNodesWithRole', '功能节点列表');
+        Arr::set($desc, 'rbac.allNodes', '功能节点列表');
         Arr::set($desc, 'rbac.allRoles', '角色列表');
         Arr::set($desc, 'rbac.createRole', '新建角色');
         Arr::set($desc, 'rbac.deleteRole', '删除角色');
-        Arr::set($desc, 'rbac.findRoleWithNodes', '获取角色及功能节点');
-        Arr::set($desc, 'rbac.refreshNodes', '刷新功能节点');
-        Arr::set($desc, 'rbac.saveRoleSort', '角色排序');
-        Arr::set($desc, 'rbac.syncNodeRoles', '设置功能节点角色');
-        Arr::set($desc, 'rbac.syncRoleNodes', '设置角色权限');
         Arr::set($desc, 'rbac.updateRole', '修改角色');
+        Arr::set($desc, 'rbac.findRoleWithNodes', '获取角色及功能节点');
+        Arr::set($desc, 'rbac.saveRoleSort', '角色排序');
+        Arr::set($desc, 'rbac.syncRoleNodes', '设置角色权限');
 
         return $desc;
     }
@@ -145,25 +134,13 @@ class RbacNodeService
         // 清理无效节点
         RbacNode::whereNotIn('id', $ids)->delete();
         // 清理无效权限
-        RbacAccessService::clearInvalidAccess();
+        RbacAccess::whereNotIn('node_id', RbacNode::pluck('id'))->delete();
     }
 
     public static function syncRoles($id, array $roles)
     {
         $node = RbacNode::findOrFail($id);
-        $ret = $node->roles()->sync($roles);
-        $roles = RbacRoleService::readByIds(array_merge($ret['attached'], $ret['detached']));
-        $roles->each(function ($role) {
-            $role->load('users');
-        })
-            ->pluck('users')
-            ->flatten(1)
-            ->unique(function ($user) {
-                return $user->id;
-            })
-            ->each(function ($user) {
-                $user->rbacResetSecret();
-            });
+        $node->roles()->sync($roles);
         return $node->roles;
     }
 }

@@ -14,6 +14,6 @@ class RbacNode extends Model
 
     public function roles()
     {
-        return $this->belongsToMany('mradang\LaravelRbac\Models\RbacRole', 'rbac_access', 'node_id', 'role_id');
+        return $this->belongsToMany(RbacRole::class, 'rbac_access', 'node_id', 'role_id');
     }
 }

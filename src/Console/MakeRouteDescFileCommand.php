@@ -15,9 +15,9 @@ class MakeRouteDescFileCommand extends Command
     {
         $n = RbacNodeService::makeRouteDescFile();
         if ($n) {
-            echo '成功生成路由描述文件';
+            $this->info('成功生成路由描述文件');
         } else {
-            echo '生成路由描述文件失败';
+            $this->error('生成路由描述文件失败');
         }
     }
 }

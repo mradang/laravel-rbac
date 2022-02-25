@@ -2,7 +2,6 @@
 
 namespace mradang\LaravelRbac\Test;
 
-use Illuminate\Support\Arr;
 use mradang\LaravelRbac\Models\RbacNode;
 use mradang\LaravelRbac\Services\RbacNodeService;
 use mradang\LaravelRbac\Services\RbacRoleService;
@@ -40,7 +39,7 @@ class FeatureTest extends TestCase
             'sort' => 1,
         ]);
 
-        RbacRoleService::syncNodes($role->id, RbacNodeService::ids()->toArray());
+        RbacRoleService::syncNodes($role->id, RbacNode::pluck('id')->toArray());
         $this->assertDatabaseHas('rbac_access', [
             'role_id' => $role->id,
             'node_id' => $node->id,

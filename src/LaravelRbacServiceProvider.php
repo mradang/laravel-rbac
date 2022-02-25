@@ -3,8 +3,8 @@
 namespace mradang\LaravelRbac;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Support\Facades\Auth;
+use mradang\LaravelRbac\Console\MakeRouteDescFileCommand;
+use mradang\LaravelRbac\Console\RefreshRbacNodeCommand;
 
 class LaravelRbacServiceProvider extends ServiceProvider
 {
@@ -20,8 +20,6 @@ class LaravelRbacServiceProvider extends ServiceProvider
         $this->registerRoutes();
         $this->registerCommands();
         $this->registerMigrations();
-        $this->registerGuard();
-        $this->registerRouteMiddleware();
     }
 
     public function register()
@@ -41,8 +39,8 @@ class LaravelRbacServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\MakeRouteDescFileCommand::class,
-                Console\RefreshRbacNodeCommand::class,
+                MakeRouteDescFileCommand::class,
+                RefreshRbacNodeCommand::class,
             ]);
         }
     }
@@ -52,26 +50,5 @@ class LaravelRbacServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(\dirname(__DIR__) . '/migrations/');
         }
-    }
-
-    protected function registerGuard()
-    {
-        Auth::viaRequest('rbac-token', function ($request) {
-            $user = Services\AuthService::checkToken($request);
-            return $user ?: null;
-        });
-    }
-
-    protected function registerRouteMiddleware()
-    {
-        // 认证中间件
-        $this->app['router']->aliasMiddleware('auth.basic', Middleware\Authenticate::class);
-        $this->app['router']->aliasMiddleware('auth', Middleware\Authorization::class);
-
-        // 修改全局认证配置
-        config([
-            'auth.defaults.guard' => 'api',
-            'auth.guards.api.driver' => 'rbac-token',
-        ]);
     }
 }
