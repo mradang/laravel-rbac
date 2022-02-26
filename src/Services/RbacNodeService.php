@@ -96,12 +96,16 @@ class RbacNodeService
         // 重新生成功能说明文件
         $new = [];
         foreach ($nodes as $node) {
-            list(, $module) = explode('/', (string)$node);
-            if (!array_key_exists($module, $new)) {
-                $new[$module] = [];
+            $arr = explode('/', (string)$node);
+            if (count($arr) === 3) {
+                list(, $module, $function) = $arr;
+                if ($module && $function) {
+                    if (!array_key_exists($module, $new)) {
+                        $new[$module] = [];
+                    }
+                    $new[$module][$function] = Arr::get($desc, "$module.$function", '');
+                }
             }
-            $function = Str::after($node, "/$module/");
-            $new[$module][$function] = Arr::get($desc, "$module.$function", '');
         }
 
         // 排序
