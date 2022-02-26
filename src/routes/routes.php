@@ -6,7 +6,7 @@ use mradang\LaravelRbac\Controllers\RbacRoleController;
 
 Route::group([
     'prefix' => 'api',
-    'middleware' => ['auth'],
+    'middleware' => ['auth:sanctum', 'rbac'],
 ], function () {
     Route::group(['prefix' => 'rbac'], function () {
         Route::post('allNodes', [RbacNodeController::class, 'all']);

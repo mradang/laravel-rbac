@@ -12,6 +12,7 @@
     "require": {
         "php": "^8.0.2",
         "laravel/framework": "^9.2",
+        "laravel/sanctum": "^2.14.1",
         "overtrue/laravel-pinyin": "^4.0"
     },
     "autoload": {

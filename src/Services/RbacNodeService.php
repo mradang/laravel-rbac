@@ -34,7 +34,7 @@ class RbacNodeService
     {
         return self::apiRoutes()
             ->filter(function ($route) {
-                return !in_array('auth', $route->middleware());
+                return !in_array('rbac', $route->middleware());
             })
             ->map(function ($route) {
                 $uri = Str::start($route->uri, '/');
@@ -47,7 +47,7 @@ class RbacNodeService
     {
         return self::apiRoutes()
             ->filter(function ($route) {
-                return in_array('auth', $route->middleware());
+                return in_array('rbac', $route->middleware());
             })
             ->map(function ($route) {
                 $uri = Str::start($route->uri, '/');
@@ -96,7 +96,7 @@ class RbacNodeService
         // 重新生成功能说明文件
         $new = [];
         foreach ($nodes as $node) {
-            list(, $module) = explode('/', $node);
+            list(, $module) = explode('/', (string)$node);
             if (!array_key_exists($module, $new)) {
                 $new[$module] = [];
             }
@@ -123,7 +123,7 @@ class RbacNodeService
         $nodes = self::AuthNodes();
         $ids = [];
         foreach ($nodes as $node) {
-            list(, $module) = explode('/', $node);
+            list(, $module) = explode('/', (string)$node);
             $function = Str::after($node, "/$module/");
             $rbac_node = RbacNode::firstOrNew(['name' => $node]);
             $rbac_node->description = Arr::get($desc, "$module.$function", '');
