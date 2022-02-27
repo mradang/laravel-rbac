@@ -11,7 +11,7 @@ trait UserModelTrait
 
     public function rbacRoles()
     {
-        return $this->belongsToMany(RbacRole::class, 'rbac_role_user', 'user_id', 'role_id');
+        return $this->belongsToMany(RbacRole::class, 'rbac_role_user', 'user_id', 'role_id')->orderBy('sort');
     }
 
     public function getAccessAttribute()
