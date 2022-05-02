@@ -10,7 +10,6 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
         "overtrue/laravel-pinyin": "^4.0"
@@ -33,7 +32,8 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.10",
+        "laravel/framework": "^9.0",
+        "phpunit/phpunit": "^9.0",
         "orchestra/testbench": "^7.0"
     }
 }
