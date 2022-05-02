@@ -26,7 +26,7 @@ trait UserModelTrait
             }
         }
 
-        return $nodes->unique()->toArray();
+        return $nodes->unique()->values()->toArray();
     }
 
     public function rbacSyncRoles(array $roles)
