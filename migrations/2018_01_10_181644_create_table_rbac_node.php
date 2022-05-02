@@ -15,7 +15,7 @@ return new class extends Migration
     {
         // 功能节点表
         Schema::create('rbac_node', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name'); // 功能节点
             $table->string('description')->nullable(); // 功能说明
         });

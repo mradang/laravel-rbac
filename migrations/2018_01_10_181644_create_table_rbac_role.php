@@ -15,7 +15,7 @@ return new class extends Migration
     {
         // 角色表
         Schema::create('rbac_role', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name'); // 角色名称
             $table->string('pinyin')->nullable(); // 拼音首字母
             $table->unsignedInteger('sort'); // 排序
