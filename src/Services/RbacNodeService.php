@@ -16,42 +16,31 @@ class RbacNodeService
         return RbacNode::orderBy('name')->get();
     }
 
-    private static function apiRoutes(): Collection
-    {
-        $nodes = collect([]);
-        $routes = Route::getRoutes();
-        foreach ($routes as $route) {
-            $uri = Str::start($route->uri, '/');
-            if (Str::startsWith($uri, '/api/')) {
-                $nodes->push($route);
-            }
-        }
-        return $nodes;
-    }
-
     // 无需授权的节点
     public static function publicNodes(): Collection
     {
-        return self::apiRoutes()
-            ->filter(function ($route) {
-                return !in_array('rbac', $route->middleware());
-            })
+        return collect(Route::getRoutes())
             ->map(function ($route) {
-                $uri = Str::start($route->uri, '/');
-                return Str::after($uri, '/api');
+                return !in_array('rbac', $route->middleware())
+                    ? $route->getName()
+                    : null;
+            })
+            ->filter(function ($item) {
+                return !empty($item);
             });
     }
 
     // 需要授权的节点
     public static function AuthNodes(): Collection
     {
-        return self::apiRoutes()
-            ->filter(function ($route) {
-                return in_array('rbac', $route->middleware());
-            })
+        return collect(Route::getRoutes())
             ->map(function ($route) {
-                $uri = Str::start($route->uri, '/');
-                return Str::after($uri, '/api');
+                return in_array('rbac', $route->middleware())
+                    ? $route->getName()
+                    : null;
+            })
+            ->filter(function ($item) {
+                return !empty($item);
             });
     }
 
@@ -96,9 +85,9 @@ class RbacNodeService
         // 重新生成功能说明文件
         $new = [];
         foreach ($nodes as $node) {
-            $arr = explode('/', (string)$node);
-            if (count($arr) === 3) {
-                list(, $module, $function) = $arr;
+            $arr = explode('.', (string)$node);
+            if (count($arr) === 2) {
+                list($module, $function) = $arr;
                 if ($module && $function) {
                     if (!array_key_exists($module, $new)) {
                         $new[$module] = [];
@@ -127,8 +116,8 @@ class RbacNodeService
         $nodes = self::AuthNodes();
         $ids = [];
         foreach ($nodes as $node) {
-            list(, $module) = explode('/', (string)$node);
-            $function = Str::after($node, "/$module/");
+            list($module) = explode('.', (string)$node);
+            $function = Str::after($node, "$module.");
             $rbac_node = RbacNode::firstOrNew(['name' => $node]);
             $rbac_node->description = Arr::get($desc, "$module.$function", '');
             $rbac_node->save();

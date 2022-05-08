@@ -3,28 +3,32 @@
 namespace mradang\LaravelRbac\Controllers;
 
 use Illuminate\Http\Request;
+use mradang\LaravelRbac\Services\RbacNodeService;
 use mradang\LaravelRbac\Services\RbacRoleService;
 
-class RbacRoleController extends Controller
+class RbacController extends Controller
 {
-    private $messages = [
-        'name.unique' => '角色名已经存在！',
-    ];
+    public function allNodes()
+    {
+        return RbacNodeService::all();
+    }
 
-    public function all()
+    public function allRoles()
     {
         return RbacRoleService::all();
     }
 
-    public function create(Request $request)
+    public function createRole(Request $request)
     {
         $request->validate([
             'name' => 'required|unique:rbac_role',
-        ], $this->messages);
+        ], [
+            'name.unique' => '角色名已存在',
+        ]);
         return RbacRoleService::create($request->only('name'));
     }
 
-    public function delete(Request $request)
+    public function deleteRole(Request $request)
     {
         $request->validate([
             'id' => 'required|integer|min:1',
@@ -32,16 +36,18 @@ class RbacRoleController extends Controller
         return RbacRoleService::delete($request->input('id'));
     }
 
-    public function update(Request $request)
+    public function updateRole(Request $request)
     {
         $request->validate([
             'id' => 'required|integer',
             'name' => 'required|unique:rbac_role,name,' . $request->input('id'),
-        ], $this->messages);
+        ], [
+            'name.unique' => '角色名已存在',
+        ]);
         return RbacRoleService::update($request->only('id', 'name'));
     }
 
-    public function findWithNodes(Request $request)
+    public function findRoleWithNodes(Request $request)
     {
         $request->validate([
             'id' => 'required|integer|min:1',
@@ -49,7 +55,7 @@ class RbacRoleController extends Controller
         return RbacRoleService::findWithNodes($request->input('id'));
     }
 
-    public function saveSort(Request $request)
+    public function saveRoleSort(Request $request)
     {
         $validatedData = $request->validate([
             '*.id' => 'required|integer',
@@ -58,7 +64,7 @@ class RbacRoleController extends Controller
         RbacRoleService::saveSort($validatedData);
     }
 
-    public function syncNodes(Request $request)
+    public function syncRoleNodes(Request $request)
     {
         $validatedData = $request->validate([
             'role_id' => 'required|integer|min:1',

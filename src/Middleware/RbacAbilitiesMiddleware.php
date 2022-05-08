@@ -4,7 +4,7 @@ namespace mradang\LaravelRbac\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 
 class RbacAbilitiesMiddleware
@@ -18,7 +18,7 @@ class RbacAbilitiesMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $path = Str::after($request->getPathInfo(), '/api');
+        $path = Route::current()->getName();
 
         return (new CheckAbilities())->handle($request, $next, $path);
     }

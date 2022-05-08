@@ -19,6 +19,16 @@ RBAC_USER_MODEL=\App\Models\User
 php artisan migrate:refresh
 ```
 
+3. 用户模型配置
+
+```
+use Laravel\Sanctum\HasApiTokens;
+```
+
+4. 路由
+
+   需指定路由 name，以「abc.xyz」形式命名，并添加「rbac」中间件
+
 ## 添加的内容
 
 ### 添加的数据表迁移
