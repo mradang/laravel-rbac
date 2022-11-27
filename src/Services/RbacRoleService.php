@@ -2,6 +2,7 @@
 
 namespace mradang\LaravelRbac\Services;
 
+use mradang\LaravelRbac\Models\RbacNode;
 use mradang\LaravelRbac\Models\RbacRole;
 
 class RbacRoleService
@@ -57,6 +58,14 @@ class RbacRoleService
     {
         foreach ($data as $item) {
             RbacRole::where('id', $item['id'])->update(['sort' => $item['sort']]);
+        }
+    }
+
+    public static function authorizeAdminRole(string $admin_role_name)
+    {
+        $role = RbacRole::where('name', $admin_role_name)->first();
+        if ($role) {
+            $role->nodes()->sync(RbacNode::pluck('id'));
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace mradang\LaravelRbac;
 
 use Illuminate\Support\ServiceProvider;
+use mradang\LaravelRbac\Console\AuthorizeAdminRoleCommand;
 use mradang\LaravelRbac\Console\MakeRouteDescFileCommand;
 use mradang\LaravelRbac\Console\RefreshRbacNodeCommand;
 use mradang\LaravelRbac\Middleware\RbacAbilitiesMiddleware;
@@ -34,6 +35,7 @@ class LaravelRbacServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
+                AuthorizeAdminRoleCommand::class,
                 MakeRouteDescFileCommand::class,
                 RefreshRbacNodeCommand::class,
             ]);
