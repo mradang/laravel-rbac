@@ -25,10 +25,10 @@ class FeatureTest extends TestCase
 
         RbacNodeService::refresh();
         $this->assertDatabaseHas('rbac_node', [
-            'name' => '/rbac/createRole',
+            'name' => 'rbac.createRole',
             'description' => '新建角色',
         ]);
-        $node = RbacNode::where('name', '/rbac/createRole')->first();
+        $node = RbacNode::where('name', 'rbac.createRole')->first();
 
         $role = RbacRoleService::create([
             'name' => '管理员',
