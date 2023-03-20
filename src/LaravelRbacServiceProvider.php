@@ -21,14 +21,14 @@ class LaravelRbacServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            \dirname(__DIR__) . '/config/rbac.php',
+            \dirname(__DIR__).'/config/rbac.php',
             'rbac'
         );
     }
 
     protected function registerRoutes()
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/routes.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/routes.php');
     }
 
     protected function registerCommands()
@@ -45,7 +45,7 @@ class LaravelRbacServiceProvider extends ServiceProvider
     protected function registerMigrations()
     {
         if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(\dirname(__DIR__) . '/migrations/');
+            $this->loadMigrationsFrom(\dirname(__DIR__).'/migrations/');
         }
     }
 

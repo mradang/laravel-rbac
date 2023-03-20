@@ -42,7 +42,7 @@ class RbacController extends Controller
     {
         $request->validate([
             'id' => 'required|integer',
-            'name' => 'required|unique:rbac_role,name,' . $request->input('id'),
+            'name' => 'required|unique:rbac_role,name,'.$request->input('id'),
         ], [
             'name.unique' => '角色名已存在',
         ]);
