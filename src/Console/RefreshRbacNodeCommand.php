@@ -4,7 +4,6 @@ namespace mradang\LaravelRbac\Console;
 
 use Illuminate\Console\Command;
 use mradang\LaravelRbac\Services\RbacNodeService;
-use Illuminate\Support\Facades\DB;
 
 class RefreshRbacNodeCommand extends Command
 {

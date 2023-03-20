@@ -28,6 +28,7 @@ class RbacRoleService
         $sort = RbacRole::max('sort') ?? 0;
         $role->sort = $sort + 1;
         $role->save();
+
         return $role;
     }
 
@@ -36,6 +37,7 @@ class RbacRoleService
         $role = RbacRole::findOrFail($data['id']);
         $role->fill($data);
         $role->save();
+
         return $role;
     }
 

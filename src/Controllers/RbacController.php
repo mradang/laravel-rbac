@@ -25,6 +25,7 @@ class RbacController extends Controller
         ], [
             'name.unique' => '角色名已存在',
         ]);
+
         return RbacRoleService::create($request->only('name'));
     }
 
@@ -33,6 +34,7 @@ class RbacController extends Controller
         $request->validate([
             'id' => 'required|integer|min:1',
         ]);
+
         return RbacRoleService::delete($request->input('id'));
     }
 
@@ -44,6 +46,7 @@ class RbacController extends Controller
         ], [
             'name.unique' => '角色名已存在',
         ]);
+
         return RbacRoleService::update($request->only('id', 'name'));
     }
 
@@ -52,6 +55,7 @@ class RbacController extends Controller
         $request->validate([
             'id' => 'required|integer|min:1',
         ]);
+
         return RbacRoleService::findWithNodes($request->input('id'));
     }
 

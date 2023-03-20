@@ -6,7 +6,12 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "vendor/bin/phpunit"
+            "command": "composer run-script test"
+        },
+        {
+            "label": "fix-style",
+            "type": "shell",
+            "command": "composer run-script fix-style"
         }
     ]
 }
