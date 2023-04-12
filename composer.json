@@ -12,12 +12,9 @@
     "require": {
         "laravel/framework": "^9.0 || ^10.0",
         "laravel/sanctum": "^2.14 || ^3.0",
-        "overtrue/laravel-pinyin": "^4.0 || ^5.0"
+        "overtrue/laravel-pinyin": "~5.0"
     },
     "require-dev": {
-        "brainmaestro/composer-git-hooks": "dev-master",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "laravel/pint": "*",
         "orchestra/testbench": "^8.0",
         "phpunit/phpunit": "^10.0"
     },
@@ -36,27 +33,6 @@
             "providers": [
                 "mradang\\LaravelRbac\\LaravelRbacServiceProvider"
             ]
-        },
-        "hooks": {
-            "pre-commit": [
-                "composer check-style"
-            ],
-            "pre-push": [
-                "composer check-style"
-            ]
         }
-    },
-    "scripts": {
-        "cghooks": "vendor/bin/cghooks",
-        "post-install-cmd": "cghooks add --ignore-lock",
-        "post-update-cmd": "cghooks update",
-        "check-style": "vendor/bin/pint --test",
-        "fix-style": "vendor/bin/pint",
-        "test": "vendor/bin/phpunit --colors=always"
-    },
-    "scripts-descriptions": {
-        "test": "Run all tests.",
-        "check-style": "Run style checks (only dry run - no fixing!).",
-        "fix-style": "Run style checks and fix violations."
     }
 }
