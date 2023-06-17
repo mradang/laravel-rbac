@@ -51,7 +51,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 ### 添加的命令
 
-1. 生成路由描述文件：storage/app/route_desc.json
+1. 生成路由描述文件：route_desc.json
 
 ```bash
 php artisan rbac:MakeRouteDescFile
