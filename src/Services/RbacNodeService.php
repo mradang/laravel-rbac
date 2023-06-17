@@ -46,7 +46,7 @@ class RbacNodeService
 
     private static function getRouteDesc()
     {
-        $filename = storage_path('app/route_desc.json');
+        $filename = base_path('route_desc.json');
 
         $desc = [];
         if (is_file($filename) && is_readable($filename)) {
@@ -68,7 +68,7 @@ class RbacNodeService
 
     private static function setRouteDesc(array $desc)
     {
-        $filename = storage_path('app/route_desc.json');
+        $filename = base_path('route_desc.json');
         $content = json_encode($desc, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
         if ($content && is_writable(dirname($filename))) {
             return file_put_contents($filename, $content);
