@@ -8,17 +8,12 @@ use mradang\LaravelRbac\Services\RbacRoleService;
 
 class FeatureTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
     }
 
-    /**
-     * @covers RbacNodeService::refresh
-     * @covers RbacNodeService::all
-     * @covers RbacRoleService::create
-     */
-    public function testBasicFeatures()
+    public function test_basic_features()
     {
         $user = User::create(['name' => '张三']);
         $this->assertSame(1, $user->id);

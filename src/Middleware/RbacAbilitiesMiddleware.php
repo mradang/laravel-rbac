@@ -19,6 +19,6 @@ class RbacAbilitiesMiddleware
     {
         $path = Route::current()->getName();
 
-        return (new CheckAbilities())->handle($request, $next, $path);
+        return (new CheckAbilities)->handle($request, $next, $path);
     }
 }
