@@ -3,6 +3,7 @@
 namespace mradang\LaravelRbac\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Overtrue\Pinyin\Pinyin;
 
 class RbacRole extends Model
 {
@@ -27,6 +28,6 @@ class RbacRole extends Model
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['pinyin'] = pinyin_abbr($value);
+        $this->attributes['pinyin'] = Pinyin::abbr($value, false, true)->join('');
     }
 }
